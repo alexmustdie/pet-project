@@ -109,7 +109,7 @@ def delete_task(task_id: str, db: Session = Depends(get_db)) -> None:
     db.commit()
 
 class Category(BaseModel):
-    '''Модель задачи'''
+    '''Модель категории'''
     id: str
     name: str
 
