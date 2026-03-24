@@ -4,20 +4,25 @@ from app.api.dependencies import get_category_service
 from app.schemas.category import CategoryCreate, CategoryRead, CategoryUpdate
 from app.services.category import CategoryNotFoundError, CategoryService
 
-router = APIRouter(prefix='/categories', tags=['categories'])
+router = APIRouter(prefix="/categories", tags=["categories"])
 
-@router.get('', response_model=list[CategoryRead])
-def get_categories(service: CategoryService = Depends(get_category_service)) -> list[CategoryRead]:
+
+@router.get("", response_model=list[CategoryRead])
+def get_categories(
+    service: CategoryService = Depends(get_category_service),
+) -> list[CategoryRead]:
     return service.list_categories()
 
-@router.post('', response_model=CategoryRead, status_code=status.HTTP_201_CREATED)
+
+@router.post("", response_model=CategoryRead, status_code=status.HTTP_201_CREATED)
 def create_category(
     payload: CategoryCreate,
     service: CategoryService = Depends(get_category_service),
 ) -> CategoryRead:
     return service.create_category(payload)
 
-@router.patch('/{category_id}', response_model=CategoryRead)
+
+@router.patch("/{category_id}", response_model=CategoryRead)
 def update_category(
     category_id: str,
     payload: CategoryUpdate,
@@ -28,10 +33,11 @@ def update_category(
     except CategoryNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Категория не найдена',
+            detail="Категория не найдена",
         )
 
-@router.delete('/{category_id}', status_code=status.HTTP_204_NO_CONTENT)
+
+@router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_category(
     category_id: str,
     service: CategoryService = Depends(get_category_service),
@@ -41,5 +47,5 @@ def delete_category(
     except CategoryNotFoundError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail='Категория не найдена',
+            detail="Категория не найдена",
         )
